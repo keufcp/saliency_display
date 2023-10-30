@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 
 from utils.cvfpscalc import CvFpsCalc
-import saliency_detect
+import utils.saliency_detect as saliency_detect
 import config
 
 
@@ -32,13 +32,19 @@ def main():
         ret, frame = cap.read()
         if not ret:
             break
-        clipped_frame = frame[0:1040, 640:1280] # カメラキャプチャを縦長にクロップ 2画面なら　[0:1040, 480:1440]
-
+        if config.threshold:
+            clipped_frame = frame[0:1040, 640:1280] # カメラキャプチャを縦長にクロップ 3画面
+        else :
+            clipped_frame = frame[0:1040, 480:1440] # カメラキャプチャを縦長にクロップ 2画面
+        
         # 処理 
         out = saliency_detect.saliency_detect(clipped_frame, config.algo)
 
         # 画面反映 
         if config.showfps:
+            # 縁取りを追加
+            offset = 1  # オフセット値
+            cv.putText(out, f"FPS: {int(display_fps)}", (10+offset, 50+offset), cv.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2, cv.LINE_AA)
             cv.putText(out, f"FPS: {int(display_fps)}", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA)
         cv.imshow(window_name, out)
 

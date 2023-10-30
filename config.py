@@ -13,3 +13,10 @@ http://urx.blue/05rg
 
 # FPS表示
 showfps = True
+
+# スレッショルド表示
+threshold = True
+
+# ヒートマップと元映像の合成割合
+# 0: 元映像     1: ヒートマップのみ
+alpha = 0.5

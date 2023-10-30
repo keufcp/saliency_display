@@ -1,4 +1,5 @@
 import cv2
+from config import threshold, alpha
 
 def saliency_detect(img, method="SR"):
 
@@ -16,14 +17,18 @@ def saliency_detect(img, method="SR"):
     i_saliency = (map * 255).astype("uint8")
 
     # スレッショルド作成
-    i_threshold = cv2.threshold(i_saliency, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    if threshold:
+        i_threshold = cv2.threshold(i_saliency, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
     # heatmap作成
     heatmap = cv2.applyColorMap(i_saliency, cv2.COLORMAP_JET)
-    alpha = 0.5
     heatmap = cv2.addWeighted(heatmap, alpha, img, 1 - alpha, 0)
 
-    combined_image = cv2.hconcat([img, cv2.cvtColor(i_threshold, cv2.COLOR_GRAY2BGR), heatmap])
+    if threshold:
+        combined_image = cv2.hconcat([img, cv2.cvtColor(i_threshold, cv2.COLOR_GRAY2BGR), heatmap])
+    else:
+        combined_image = cv2.hconcat([img, heatmap])
+
     return combined_image
 
     # 画像を保存
