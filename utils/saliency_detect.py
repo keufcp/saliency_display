@@ -30,11 +30,3 @@ def saliency_detect(img, method="SR"):
         combined_image = cv2.hconcat([img, heatmap])
 
     return combined_image
-
-    # 画像を保存
-    # cv2.imwrite(output_img, heatmap)
-    # cv2.imwrite("th_" + output_img, i_threshold)
-
-# cv2.imshow("Image", saliency_detect("150.jpg", "SR"))
-# cv2.waitKey(0)  # 0を指定するとキーが押されるまで待ちます
-# cv2.destroyAllWindows()  # ウィンドウを閉じます
